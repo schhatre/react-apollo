@@ -1,24 +1,24 @@
-# import Link, LinkSubscriptionPayload, Vote, VoteSubscriptionPayload, LinkOrderByInput from "./generated/prisma.graphql" 
+# import Course, CourseSubscriptionPayload, Vote, VoteSubscriptionPayload, CourseOrderByInput from "./generated/prisma.graphql" 
 
 type Query {
   info: String!
-  feed(filter: String, skip: Int, first: Int, orderBy: LinkOrderByInput): Feed!
+  feed(filter: String, skip: Int, first: Int, orderBy: CourseOrderByInput): Feed!
 }
 
 type Feed {
-  links: [Link!]!
+  courses: [Course!]!
   count: Int!
 }
 
 type Mutation {
-  post(url: String!, description: String!): Link!
+  post(courseName: String!, professorName: String, description: String!): Course!
   signup(email: String!, password: String!, name: String!): AuthPayload
   login(email: String!, password: String!): AuthPayload
-  vote(linkId: ID!): Vote!
+  vote(courseId: ID!): Vote!
 }
 
 type Subscription {
-  newLink: LinkSubscriptionPayload
+  newCourse: CourseSubscriptionPayload
   newVote: VoteSubscriptionPayload
 }
 
@@ -31,5 +31,5 @@ type User {
   id: ID!
   name: String!
   email: String!
-  links: [Link!]!
+  courses: [Course!]!
 }

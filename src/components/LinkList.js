@@ -5,12 +5,13 @@ import gql from 'graphql-tag'
 import { LINKS_PER_PAGE } from '../constants'
 
 export const FEED_QUERY = gql`
-  query FeedQuery($first: Int, $skip: Int, $orderBy: LinkOrderByInput) {
+  query FeedQuery($first: Int, $skip: Int, $orderBy: CourseOrderByInput) {
     feed(first: $first, skip: $skip, orderBy: $orderBy) {
-      links {
+      courses {
         id
         createdAt
-        url
+        courseName
+        professorName
         description
         postedBy {
           id
@@ -30,10 +31,11 @@ export const FEED_QUERY = gql`
 
 const NEW_LINKS_SUBSCRIPTION = gql`
   subscription {
-    newLink {
+    newCourse {
       node {
         id
-        url
+        courseName
+        professorName
         description
         createdAt
         postedBy {
@@ -56,9 +58,10 @@ const NEW_VOTES_SUBSCRIPTION = gql`
     newVote {
       node {
         id
-        link {
+        course {
           id
-          url
+          courseName
+          professorName
           description
           createdAt
           postedBy {
@@ -81,7 +84,7 @@ const NEW_VOTES_SUBSCRIPTION = gql`
 `
 
 class LinkList extends Component {
-  _updateCacheAfterVote = (store, createVote, linkId) => {
+  _updateCacheAfterVote = (store, createVote, courseId) => {
     const isNewPage = this.props.location.pathname.includes('new')
     const page = parseInt(this.props.match.params.page, 10)
 
@@ -93,8 +96,8 @@ class LinkList extends Component {
       variables: { first, skip, orderBy }
     })
 
-    const votedLink = data.feed.links.find(link => link.id === linkId)
-    votedLink.votes = createVote.link.votes
+    const votedLink = data.feed.courses.find(course => course.id === courseId)
+    votedLink.votes = createVote.course.votes
     store.writeQuery({ query: FEED_QUERY, data })
   }
 
@@ -103,12 +106,12 @@ class LinkList extends Component {
       document: NEW_LINKS_SUBSCRIPTION,
       updateQuery: (prev, { subscriptionData }) => {
         if (!subscriptionData.data) return prev
-        const newLink = subscriptionData.data.newLink.node
+        const newCourse = subscriptionData.data.newCourse.node
 
         return Object.assign({}, prev, {
           feed: {
-            links: [newLink, ...prev.feed.links],
-            count: prev.feed.links.length + 1,
+            courses: [newCourse, ...prev.feed.courses],
+            count: prev.feed.courses.length + 1,
             __typename: prev.feed.__typename
           }
         })
@@ -135,9 +138,9 @@ class LinkList extends Component {
   _getLinksToRender = data => {
     const isNewPage = this.props.location.pathname.includes('new')
     if (isNewPage) {
-      return data.feed.links
+      return data.feed.courses
     }
-    const rankedLinks = data.feed.links.slice()
+    const rankedLinks = data.feed.courses.slice()
     rankedLinks.sort((l1, l2) => l2.votes.length - l1.votes.length)
     return rankedLinks
   }
@@ -168,7 +171,7 @@ class LinkList extends Component {
           this._subscribeToNewLinks(subscribeToMore)
           this._subscribeToNewVotes(subscribeToMore)
 
-          const linksToRender = this._getLinksToRender(data)
+          const coursesToRender = this._getLinksToRender(data)
           const isNewPage = this.props.location.pathname.includes('new')
           const pageIndex = this.props.match.params.page
             ? (this.props.match.params.page - 1) * LINKS_PER_PAGE
@@ -176,14 +179,15 @@ class LinkList extends Component {
 
           return (
             <Fragment>
-              {linksToRender.map((link, index) => (
-                <Link
-                  key={link.id}
-                  link={link}
+              {coursesToRender.map((course, index) => {
+                  console.error(course)
+                return (<Link
+                  key={course.id}
+                  course={course}
                   index={index + pageIndex}
                   updateStoreAfterVote={this._updateCacheAfterVote}
                 />
-              ))}
+            )})}
               {isNewPage && (
                 <div className="flex ml4 mv3 gray">
                   <div className="pointer mr2" onClick={this._previousPage}>

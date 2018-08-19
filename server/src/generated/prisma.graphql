@@ -1,7 +1,7 @@
-# source: https://eu1.prisma.sh/christian-nwamba-fd2dcf/hackernews-node/dev
-# timestamp: Wed Jun 06 2018 14:46:47 GMT+0100 (WAT)
+# source: https://us1.prisma.sh/swarajchhatre1-8b15f3/database/dev
+# timestamp: Sun Aug 19 2018 13:46:29 GMT-0700 (PDT)
 
-type AggregateLink {
+type AggregateCourse {
   count: Int!
 }
 
@@ -18,101 +18,106 @@ type BatchPayload {
   count: Long!
 }
 
-scalar DateTime
-
-type Link implements Node {
+type Course implements Node {
   id: ID!
   createdAt: DateTime!
   description: String!
-  url: String!
+  courseName: String!
+  professorName: String
   postedBy(where: UserWhereInput): User
   votes(where: VoteWhereInput, orderBy: VoteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Vote!]
 }
 
 """A connection to a list of items."""
-type LinkConnection {
+type CourseConnection {
   """Information to aid in pagination."""
   pageInfo: PageInfo!
 
   """A list of edges."""
-  edges: [LinkEdge]!
-  aggregate: AggregateLink!
+  edges: [CourseEdge]!
+  aggregate: AggregateCourse!
 }
 
-input LinkCreateInput {
+input CourseCreateInput {
   description: String!
-  url: String!
-  postedBy: UserCreateOneWithoutLinksInput
-  votes: VoteCreateManyWithoutLinkInput
+  courseName: String!
+  professorName: String
+  postedBy: UserCreateOneWithoutCoursesInput
+  votes: VoteCreateManyWithoutCourseInput
 }
 
-input LinkCreateManyWithoutPostedByInput {
-  create: [LinkCreateWithoutPostedByInput!]
-  connect: [LinkWhereUniqueInput!]
+input CourseCreateManyWithoutPostedByInput {
+  create: [CourseCreateWithoutPostedByInput!]
+  connect: [CourseWhereUniqueInput!]
 }
 
-input LinkCreateOneWithoutVotesInput {
-  create: LinkCreateWithoutVotesInput
-  connect: LinkWhereUniqueInput
+input CourseCreateOneWithoutVotesInput {
+  create: CourseCreateWithoutVotesInput
+  connect: CourseWhereUniqueInput
 }
 
-input LinkCreateWithoutPostedByInput {
+input CourseCreateWithoutPostedByInput {
   description: String!
-  url: String!
-  votes: VoteCreateManyWithoutLinkInput
+  courseName: String!
+  professorName: String
+  votes: VoteCreateManyWithoutCourseInput
 }
 
-input LinkCreateWithoutVotesInput {
+input CourseCreateWithoutVotesInput {
   description: String!
-  url: String!
-  postedBy: UserCreateOneWithoutLinksInput
+  courseName: String!
+  professorName: String
+  postedBy: UserCreateOneWithoutCoursesInput
 }
 
 """An edge in a connection."""
-type LinkEdge {
+type CourseEdge {
   """The item at the end of the edge."""
-  node: Link!
+  node: Course!
 
   """A cursor for use in pagination."""
   cursor: String!
 }
 
-enum LinkOrderByInput {
+enum CourseOrderByInput {
   id_ASC
   id_DESC
   createdAt_ASC
   createdAt_DESC
   description_ASC
   description_DESC
-  url_ASC
-  url_DESC
+  courseName_ASC
+  courseName_DESC
+  professorName_ASC
+  professorName_DESC
   updatedAt_ASC
   updatedAt_DESC
 }
 
-type LinkPreviousValues {
+type CoursePreviousValues {
   id: ID!
   createdAt: DateTime!
   description: String!
-  url: String!
+  courseName: String!
+  professorName: String
 }
 
-type LinkSubscriptionPayload {
+type CourseSubscriptionPayload {
   mutation: MutationType!
-  node: Link
+  node: Course
   updatedFields: [String!]
-  previousValues: LinkPreviousValues
+  previousValues: CoursePreviousValues
 }
 
-input LinkSubscriptionWhereInput {
+input CourseSubscriptionWhereInput {
   """Logical AND on all given filters."""
-  AND: [LinkSubscriptionWhereInput!]
+  AND: [CourseSubscriptionWhereInput!]
 
   """Logical OR on all given filters."""
-  OR: [LinkSubscriptionWhereInput!]
+  OR: [CourseSubscriptionWhereInput!]
 
   """Logical NOT on all given filters combined by AND."""
-  NOT: [LinkSubscriptionWhereInput!]
+  NOT: [CourseSubscriptionWhereInput!]
 
   """
   The subscription event gets dispatched when it's listed in mutation_in
@@ -133,70 +138,73 @@ input LinkSubscriptionWhereInput {
   The subscription event gets only dispatched when some of the field names included in this list have been updated
   """
   updatedFields_contains_some: [String!]
-  node: LinkWhereInput
+  node: CourseWhereInput
 }
 
-input LinkUpdateInput {
+input CourseUpdateInput {
   description: String
-  url: String
-  postedBy: UserUpdateOneWithoutLinksInput
-  votes: VoteUpdateManyWithoutLinkInput
+  courseName: String
+  professorName: String
+  postedBy: UserUpdateOneWithoutCoursesInput
+  votes: VoteUpdateManyWithoutCourseInput
 }
 
-input LinkUpdateManyWithoutPostedByInput {
-  create: [LinkCreateWithoutPostedByInput!]
-  connect: [LinkWhereUniqueInput!]
-  disconnect: [LinkWhereUniqueInput!]
-  delete: [LinkWhereUniqueInput!]
-  update: [LinkUpdateWithWhereUniqueWithoutPostedByInput!]
-  upsert: [LinkUpsertWithWhereUniqueWithoutPostedByInput!]
+input CourseUpdateManyWithoutPostedByInput {
+  create: [CourseCreateWithoutPostedByInput!]
+  connect: [CourseWhereUniqueInput!]
+  disconnect: [CourseWhereUniqueInput!]
+  delete: [CourseWhereUniqueInput!]
+  update: [CourseUpdateWithWhereUniqueWithoutPostedByInput!]
+  upsert: [CourseUpsertWithWhereUniqueWithoutPostedByInput!]
 }
 
-input LinkUpdateOneWithoutVotesInput {
-  create: LinkCreateWithoutVotesInput
-  connect: LinkWhereUniqueInput
+input CourseUpdateOneWithoutVotesInput {
+  create: CourseCreateWithoutVotesInput
+  connect: CourseWhereUniqueInput
   delete: Boolean
-  update: LinkUpdateWithoutVotesDataInput
-  upsert: LinkUpsertWithoutVotesInput
+  update: CourseUpdateWithoutVotesDataInput
+  upsert: CourseUpsertWithoutVotesInput
 }
 
-input LinkUpdateWithoutPostedByDataInput {
+input CourseUpdateWithoutPostedByDataInput {
   description: String
-  url: String
-  votes: VoteUpdateManyWithoutLinkInput
+  courseName: String
+  professorName: String
+  votes: VoteUpdateManyWithoutCourseInput
 }
 
-input LinkUpdateWithoutVotesDataInput {
+input CourseUpdateWithoutVotesDataInput {
   description: String
-  url: String
-  postedBy: UserUpdateOneWithoutLinksInput
+  courseName: String
+  professorName: String
+  postedBy: UserUpdateOneWithoutCoursesInput
 }
 
-input LinkUpdateWithWhereUniqueWithoutPostedByInput {
-  where: LinkWhereUniqueInput!
-  data: LinkUpdateWithoutPostedByDataInput!
+input CourseUpdateWithWhereUniqueWithoutPostedByInput {
+  where: CourseWhereUniqueInput!
+  data: CourseUpdateWithoutPostedByDataInput!
 }
 
-input LinkUpsertWithoutVotesInput {
-  update: LinkUpdateWithoutVotesDataInput!
-  create: LinkCreateWithoutVotesInput!
+input CourseUpsertWithoutVotesInput {
+  update: CourseUpdateWithoutVotesDataInput!
+  create: CourseCreateWithoutVotesInput!
 }
 
-input LinkUpsertWithWhereUniqueWithoutPostedByInput {
-  where: LinkWhereUniqueInput!
-  update: LinkUpdateWithoutPostedByDataInput!
-  create: LinkCreateWithoutPostedByInput!
+input CourseUpsertWithWhereUniqueWithoutPostedByInput {
+  where: CourseWhereUniqueInput!
+  update: CourseUpdateWithoutPostedByDataInput!
+  create: CourseCreateWithoutPostedByInput!
 }
 
-input LinkWhereInput {
+input CourseWhereInput {
   """Logical AND on all given filters."""
-  AND: [LinkWhereInput!]
+  AND: [CourseWhereInput!]
 
   """Logical OR on all given filters."""
-  OR: [LinkWhereInput!]
+  OR: [CourseWhereInput!]
 
   """Logical NOT on all given filters combined by AND."""
-  NOT: [LinkWhereInput!]
+  NOT: [CourseWhereInput!]
   id: ID
 
   """All values that are not equal to given value."""
@@ -299,55 +307,97 @@ input LinkWhereInput {
 
   """All values not ending with the given string."""
   description_not_ends_with: String
-  url: String
+  courseName: String
 
   """All values that are not equal to given value."""
-  url_not: String
+  courseName_not: String
 
   """All values that are contained in given list."""
-  url_in: [String!]
+  courseName_in: [String!]
 
   """All values that are not contained in given list."""
-  url_not_in: [String!]
+  courseName_not_in: [String!]
 
   """All values less than the given value."""
-  url_lt: String
+  courseName_lt: String
 
   """All values less than or equal the given value."""
-  url_lte: String
+  courseName_lte: String
 
   """All values greater than the given value."""
-  url_gt: String
+  courseName_gt: String
 
   """All values greater than or equal the given value."""
-  url_gte: String
+  courseName_gte: String
 
   """All values containing the given string."""
-  url_contains: String
+  courseName_contains: String
 
   """All values not containing the given string."""
-  url_not_contains: String
+  courseName_not_contains: String
 
   """All values starting with the given string."""
-  url_starts_with: String
+  courseName_starts_with: String
 
   """All values not starting with the given string."""
-  url_not_starts_with: String
+  courseName_not_starts_with: String
 
   """All values ending with the given string."""
-  url_ends_with: String
+  courseName_ends_with: String
 
   """All values not ending with the given string."""
-  url_not_ends_with: String
+  courseName_not_ends_with: String
+  professorName: String
+
+  """All values that are not equal to given value."""
+  professorName_not: String
+
+  """All values that are contained in given list."""
+  professorName_in: [String!]
+
+  """All values that are not contained in given list."""
+  professorName_not_in: [String!]
+
+  """All values less than the given value."""
+  professorName_lt: String
+
+  """All values less than or equal the given value."""
+  professorName_lte: String
+
+  """All values greater than the given value."""
+  professorName_gt: String
+
+  """All values greater than or equal the given value."""
+  professorName_gte: String
+
+  """All values containing the given string."""
+  professorName_contains: String
+
+  """All values not containing the given string."""
+  professorName_not_contains: String
+
+  """All values starting with the given string."""
+  professorName_starts_with: String
+
+  """All values not starting with the given string."""
+  professorName_not_starts_with: String
+
+  """All values ending with the given string."""
+  professorName_ends_with: String
+
+  """All values not ending with the given string."""
+  professorName_not_ends_with: String
   postedBy: UserWhereInput
   votes_every: VoteWhereInput
   votes_some: VoteWhereInput
   votes_none: VoteWhereInput
 }
 
-input LinkWhereUniqueInput {
+input CourseWhereUniqueInput {
   id: ID
 }
+
+scalar DateTime
 
 """
 The `Long` scalar type represents non-fractional signed whole numeric values.
@@ -356,22 +406,22 @@ Long can represent values between -(2^63) and 2^63 - 1.
 scalar Long
 
 type Mutation {
-  createLink(data: LinkCreateInput!): Link!
+  createCourse(data: CourseCreateInput!): Course!
   createUser(data: UserCreateInput!): User!
   createVote(data: VoteCreateInput!): Vote!
-  updateLink(data: LinkUpdateInput!, where: LinkWhereUniqueInput!): Link
+  updateCourse(data: CourseUpdateInput!, where: CourseWhereUniqueInput!): Course
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   updateVote(data: VoteUpdateInput!, where: VoteWhereUniqueInput!): Vote
-  deleteLink(where: LinkWhereUniqueInput!): Link
+  deleteCourse(where: CourseWhereUniqueInput!): Course
   deleteUser(where: UserWhereUniqueInput!): User
   deleteVote(where: VoteWhereUniqueInput!): Vote
-  upsertLink(where: LinkWhereUniqueInput!, create: LinkCreateInput!, update: LinkUpdateInput!): Link!
+  upsertCourse(where: CourseWhereUniqueInput!, create: CourseCreateInput!, update: CourseUpdateInput!): Course!
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
   upsertVote(where: VoteWhereUniqueInput!, create: VoteCreateInput!, update: VoteUpdateInput!): Vote!
-  updateManyLinks(data: LinkUpdateInput!, where: LinkWhereInput): BatchPayload!
+  updateManyCourses(data: CourseUpdateInput!, where: CourseWhereInput): BatchPayload!
   updateManyUsers(data: UserUpdateInput!, where: UserWhereInput): BatchPayload!
   updateManyVotes(data: VoteUpdateInput!, where: VoteWhereInput): BatchPayload!
-  deleteManyLinks(where: LinkWhereInput): BatchPayload!
+  deleteManyCourses(where: CourseWhereInput): BatchPayload!
   deleteManyUsers(where: UserWhereInput): BatchPayload!
   deleteManyVotes(where: VoteWhereInput): BatchPayload!
 }
@@ -404,13 +454,13 @@ type PageInfo {
 }
 
 type Query {
-  links(where: LinkWhereInput, orderBy: LinkOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Link]!
+  courses(where: CourseWhereInput, orderBy: CourseOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Course]!
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   votes(where: VoteWhereInput, orderBy: VoteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Vote]!
-  link(where: LinkWhereUniqueInput!): Link
+  course(where: CourseWhereUniqueInput!): Course
   user(where: UserWhereUniqueInput!): User
   vote(where: VoteWhereUniqueInput!): Vote
-  linksConnection(where: LinkWhereInput, orderBy: LinkOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): LinkConnection!
+  coursesConnection(where: CourseWhereInput, orderBy: CourseOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CourseConnection!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
   votesConnection(where: VoteWhereInput, orderBy: VoteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): VoteConnection!
 
@@ -422,7 +472,7 @@ type Query {
 }
 
 type Subscription {
-  link(where: LinkSubscriptionWhereInput): LinkSubscriptionPayload
+  course(where: CourseSubscriptionWhereInput): CourseSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
   vote(where: VoteSubscriptionWhereInput): VoteSubscriptionPayload
 }
@@ -432,7 +482,7 @@ type User implements Node {
   name: String!
   email: String!
   password: String!
-  links(where: LinkWhereInput, orderBy: LinkOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Link!]
+  courses(where: CourseWhereInput, orderBy: CourseOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Course!]
   votes(where: VoteWhereInput, orderBy: VoteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Vote!]
 }
 
@@ -450,12 +500,12 @@ input UserCreateInput {
   name: String!
   email: String!
   password: String!
-  links: LinkCreateManyWithoutPostedByInput
+  courses: CourseCreateManyWithoutPostedByInput
   votes: VoteCreateManyWithoutUserInput
 }
 
-input UserCreateOneWithoutLinksInput {
-  create: UserCreateWithoutLinksInput
+input UserCreateOneWithoutCoursesInput {
+  create: UserCreateWithoutCoursesInput
   connect: UserWhereUniqueInput
 }
 
@@ -464,7 +514,7 @@ input UserCreateOneWithoutVotesInput {
   connect: UserWhereUniqueInput
 }
 
-input UserCreateWithoutLinksInput {
+input UserCreateWithoutCoursesInput {
   name: String!
   email: String!
   password: String!
@@ -475,7 +525,7 @@ input UserCreateWithoutVotesInput {
   name: String!
   email: String!
   password: String!
-  links: LinkCreateManyWithoutPostedByInput
+  courses: CourseCreateManyWithoutPostedByInput
 }
 
 """An edge in a connection."""
@@ -552,17 +602,17 @@ input UserUpdateInput {
   name: String
   email: String
   password: String
-  links: LinkUpdateManyWithoutPostedByInput
+  courses: CourseUpdateManyWithoutPostedByInput
   votes: VoteUpdateManyWithoutUserInput
 }
 
-input UserUpdateOneWithoutLinksInput {
-  create: UserCreateWithoutLinksInput
+input UserUpdateOneWithoutCoursesInput {
+  create: UserCreateWithoutCoursesInput
   connect: UserWhereUniqueInput
   disconnect: Boolean
   delete: Boolean
-  update: UserUpdateWithoutLinksDataInput
-  upsert: UserUpsertWithoutLinksInput
+  update: UserUpdateWithoutCoursesDataInput
+  upsert: UserUpsertWithoutCoursesInput
 }
 
 input UserUpdateOneWithoutVotesInput {
@@ -573,7 +623,7 @@ input UserUpdateOneWithoutVotesInput {
   upsert: UserUpsertWithoutVotesInput
 }
 
-input UserUpdateWithoutLinksDataInput {
+input UserUpdateWithoutCoursesDataInput {
   name: String
   email: String
   password: String
@@ -584,12 +634,12 @@ input UserUpdateWithoutVotesDataInput {
   name: String
   email: String
   password: String
-  links: LinkUpdateManyWithoutPostedByInput
+  courses: CourseUpdateManyWithoutPostedByInput
 }
 
-input UserUpsertWithoutLinksInput {
-  update: UserUpdateWithoutLinksDataInput!
-  create: UserCreateWithoutLinksInput!
+input UserUpsertWithoutCoursesInput {
+  update: UserUpdateWithoutCoursesDataInput!
+  create: UserCreateWithoutCoursesInput!
 }
 
 input UserUpsertWithoutVotesInput {
@@ -766,9 +816,9 @@ input UserWhereInput {
 
   """All values not ending with the given string."""
   password_not_ends_with: String
-  links_every: LinkWhereInput
-  links_some: LinkWhereInput
-  links_none: LinkWhereInput
+  courses_every: CourseWhereInput
+  courses_some: CourseWhereInput
+  courses_none: CourseWhereInput
   votes_every: VoteWhereInput
   votes_some: VoteWhereInput
   votes_none: VoteWhereInput
@@ -781,7 +831,7 @@ input UserWhereUniqueInput {
 
 type Vote implements Node {
   id: ID!
-  link(where: LinkWhereInput): Link!
+  course(where: CourseWhereInput): Course!
   user(where: UserWhereInput): User!
 }
 
@@ -796,12 +846,12 @@ type VoteConnection {
 }
 
 input VoteCreateInput {
-  link: LinkCreateOneWithoutVotesInput!
+  course: CourseCreateOneWithoutVotesInput!
   user: UserCreateOneWithoutVotesInput!
 }
 
-input VoteCreateManyWithoutLinkInput {
-  create: [VoteCreateWithoutLinkInput!]
+input VoteCreateManyWithoutCourseInput {
+  create: [VoteCreateWithoutCourseInput!]
   connect: [VoteWhereUniqueInput!]
 }
 
@@ -810,12 +860,12 @@ input VoteCreateManyWithoutUserInput {
   connect: [VoteWhereUniqueInput!]
 }
 
-input VoteCreateWithoutLinkInput {
+input VoteCreateWithoutCourseInput {
   user: UserCreateOneWithoutVotesInput!
 }
 
 input VoteCreateWithoutUserInput {
-  link: LinkCreateOneWithoutVotesInput!
+  course: CourseCreateOneWithoutVotesInput!
 }
 
 """An edge in a connection."""
@@ -880,17 +930,17 @@ input VoteSubscriptionWhereInput {
 }
 
 input VoteUpdateInput {
-  link: LinkUpdateOneWithoutVotesInput
+  course: CourseUpdateOneWithoutVotesInput
   user: UserUpdateOneWithoutVotesInput
 }
 
-input VoteUpdateManyWithoutLinkInput {
-  create: [VoteCreateWithoutLinkInput!]
+input VoteUpdateManyWithoutCourseInput {
+  create: [VoteCreateWithoutCourseInput!]
   connect: [VoteWhereUniqueInput!]
   disconnect: [VoteWhereUniqueInput!]
   delete: [VoteWhereUniqueInput!]
-  update: [VoteUpdateWithWhereUniqueWithoutLinkInput!]
-  upsert: [VoteUpsertWithWhereUniqueWithoutLinkInput!]
+  update: [VoteUpdateWithWhereUniqueWithoutCourseInput!]
+  upsert: [VoteUpsertWithWhereUniqueWithoutCourseInput!]
 }
 
 input VoteUpdateManyWithoutUserInput {
@@ -902,17 +952,17 @@ input VoteUpdateManyWithoutUserInput {
   upsert: [VoteUpsertWithWhereUniqueWithoutUserInput!]
 }
 
-input VoteUpdateWithoutLinkDataInput {
+input VoteUpdateWithoutCourseDataInput {
   user: UserUpdateOneWithoutVotesInput
 }
 
 input VoteUpdateWithoutUserDataInput {
-  link: LinkUpdateOneWithoutVotesInput
+  course: CourseUpdateOneWithoutVotesInput
 }
 
-input VoteUpdateWithWhereUniqueWithoutLinkInput {
+input VoteUpdateWithWhereUniqueWithoutCourseInput {
   where: VoteWhereUniqueInput!
-  data: VoteUpdateWithoutLinkDataInput!
+  data: VoteUpdateWithoutCourseDataInput!
 }
 
 input VoteUpdateWithWhereUniqueWithoutUserInput {
@@ -920,10 +970,10 @@ input VoteUpdateWithWhereUniqueWithoutUserInput {
   data: VoteUpdateWithoutUserDataInput!
 }
 
-input VoteUpsertWithWhereUniqueWithoutLinkInput {
+input VoteUpsertWithWhereUniqueWithoutCourseInput {
   where: VoteWhereUniqueInput!
-  update: VoteUpdateWithoutLinkDataInput!
-  create: VoteCreateWithoutLinkInput!
+  update: VoteUpdateWithoutCourseDataInput!
+  create: VoteCreateWithoutCourseInput!
 }
 
 input VoteUpsertWithWhereUniqueWithoutUserInput {
@@ -981,7 +1031,7 @@ input VoteWhereInput {
 
   """All values not ending with the given string."""
   id_not_ends_with: ID
-  link: LinkWhereInput
+  course: CourseWhereInput
   user: UserWhereInput
 }
 

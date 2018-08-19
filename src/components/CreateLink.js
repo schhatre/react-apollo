@@ -5,11 +5,12 @@ import { FEED_QUERY } from './LinkList'
 import { LINKS_PER_PAGE } from '../constants'
 
 const POST_MUTATION = gql`
-  mutation PostMutation($description: String!, $url: String!) {
-    post(description: $description, url: $url) {
+  mutation PostMutation($description: String!, $courseName: String!, $professorName: String) {
+    post(description: $description, courseName: $courseName, professorName :$professorName) {
       id
       createdAt
-      url
+      courseName
+      professorName
       description
     }
   }
@@ -18,32 +19,40 @@ const POST_MUTATION = gql`
 class CreateLink extends Component {
   state = {
     description: '',
-    url: '',
+    courseName: '',
+    professorName:''
   }
 
   render() {
-    const { description, url } = this.state
+    const { description, courseName, professorName } = this.state
     return (
       <div>
         <div className="flex flex-column mt3">
           <input
             className="mb2"
-            value={description}
-            onChange={e => this.setState({ description: e.target.value })}
+            value={courseName}
+            onChange={e => this.setState({ courseName: e.target.value })}
             type="text"
-            placeholder="A description for the link"
+            placeholder="The Name for the course"
           />
           <input
             className="mb2"
-            value={url}
-            onChange={e => this.setState({ url: e.target.value })}
+            value={professorName}
+            onChange={e => this.setState({ professorName: e.target.value })}
             type="text"
-            placeholder="The URL for the link"
+            placeholder="The Name for the Professor"
+          />
+          <input
+            className="mb2"
+            value={description}
+            onChange={e => this.setState({ description: e.target.value })}
+            type="text"
+            placeholder="A description for the course"
           />
         </div>
         <Mutation
           mutation={POST_MUTATION}
-          variables={{ description, url }}
+          variables={{ description, courseName, professorName }}
           onCompleted={() => this.props.history.push('/new/1')}
           update={(store, { data: { post } }) => {
             const first = LINKS_PER_PAGE
@@ -53,7 +62,7 @@ class CreateLink extends Component {
               query: FEED_QUERY,
               variables: { first, skip, orderBy },
             })
-            data.feed.links.unshift(post)
+            data.feed.courses.unshift(post)
             store.writeQuery({
               query: FEED_QUERY,
               data,

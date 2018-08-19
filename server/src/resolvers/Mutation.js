@@ -4,10 +4,11 @@ const { APP_SECRET, getUserId } = require('../utils')
 
 function post(parent, args, context, info) {
   const userId = getUserId(context)
-  return context.db.mutation.createLink(
+  return context.db.mutation.createCourse(
     {
       data: {
-        url: args.url,
+        courseName: args.courseName,
+        professorName: args.professorName,
         description: args.description,
         postedBy: { connect: { id: userId } },
       },
@@ -49,19 +50,19 @@ async function login(parent, args, context, info) {
 
 async function vote(parent, args, context, info) {
   const userId = getUserId(context)
-  const linkExists = await context.db.exists.Vote({
+  const courseExists = await context.db.exists.Vote({
     user: { id: userId },
-    link: { id: args.linkId },
+    course: { id: args.courseId },
   })
-  if (linkExists) {
-    throw new Error(`Already voted for link: ${args.linkId}`)
+  if (courseExists) {
+    throw new Error(`Already voted for course: ${args.courseId}`)
   }
 
   return context.db.mutation.createVote(
     {
       data: {
         user: { connect: { id: userId } },
-        link: { connect: { id: args.linkId } },
+        course: { connect: { id: args.courseId } },
       },
     },
     info,

@@ -1,7 +1,7 @@
-function links(parent, args, context, info) {
-  return context.db.query.links({ where: { id_in: parent.linkIds } }, info)
+function courses(parent, args, context, info) {
+  return context.db.query.courses({ where: { id_in: parent.courseIds } }, info)
 }
 
 module.exports = {
-  links,
+  courses,
 }

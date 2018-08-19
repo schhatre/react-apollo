@@ -6,9 +6,9 @@ import Link from './Link'
 const FEED_SEARCH_QUERY = gql`
   query FeedSearchQuery($filter: String!) {
     feed(filter: $filter) {
-      links {
+      courses {
         id
-        url
+        courseName
         description
         createdAt
         postedBy {
@@ -28,7 +28,7 @@ const FEED_SEARCH_QUERY = gql`
 
 class Search extends Component {
   state = {
-    links: [],
+    courses: [],
     filter: '',
   }
 
@@ -43,8 +43,8 @@ class Search extends Component {
           />
           <button onClick={() => this._executeSearch()}>OK</button>
         </div>
-        {this.state.links.map((link, index) => (
-          <Link key={link.id} link={link} index={index} />
+        {this.state.courses.map((course, index) => (
+          <Link key={course.id} course={course} index={index} />
         ))}
       </div>
     )
@@ -56,8 +56,8 @@ class Search extends Component {
       query: FEED_SEARCH_QUERY,
       variables: { filter },
     })
-    const links = result.data.feed.links
-    this.setState({ links })
+    const courses = result.data.feed.courses
+    this.setState({ courses })
   }
 }
 
